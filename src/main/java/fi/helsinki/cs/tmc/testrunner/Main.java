@@ -12,7 +12,7 @@ import java.io.IOException;
  * @author rase
  */
 public class Main {
-    private String checkFileDir;
+    private String checkRootDir;
     private String checkResultsFilename;
     
     public static void main(String[] args) {
@@ -25,7 +25,8 @@ public class Main {
     }
     
     public void run() throws IOException {
-        // Run the code here
+        // Let's assume code is already compiled
+        // This can be done by tmc-run script which is passed to the sandbox with each submission
         try {
             readProperties();
         } catch (IllegalArgumentException e) {
@@ -44,8 +45,8 @@ public class Main {
     }
     
     private void readProperties() {
-        checkFileDir = requireProperty("tmc.test_class_dir");
-        checkResultsFilename = requireProperty("tmc.results_file");
+        checkRootDir = requireProperty("tmc.check_root_dir");
+        checkResultsFilename = requireProperty("tmc.check_results_file");
     }
     
     private String requireProperty(String name) {
