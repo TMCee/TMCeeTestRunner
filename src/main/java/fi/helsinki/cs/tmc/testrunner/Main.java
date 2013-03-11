@@ -14,6 +14,8 @@ import java.io.IOException;
 public class Main {
     private String checkRootDir;
     private String checkResultsFilename;
+    private String checkAvailablePointsFilename;
+    private String checkValgrindOutputFilename;
     
     public static void main(String[] args) {
         try {
@@ -36,9 +38,9 @@ public class Main {
         }
         
         Parser parser = new Parser(
-                new File("tmc_test_results.xml"),
                 new File(checkResultsFilename),
-                new File("valgrind.log"));
+                new File(checkAvailablePointsFilename),
+                new File(checkValgrindOutputFilename));
         parser.parse();
         TestList tests = parser.getTests();
         writeResults(tests);
@@ -47,6 +49,8 @@ public class Main {
     private void readProperties() {
         checkRootDir = requireProperty("tmc.check_root_dir");
         checkResultsFilename = requireProperty("tmc.check_results_file");
+        checkAvailablePointsFilename = requireProperty("tmc.check_available_points");
+        checkValgrindOutputFilename = requireProperty("tmc.check_valgrind_output");
     }
     
     private String requireProperty(String name) {
