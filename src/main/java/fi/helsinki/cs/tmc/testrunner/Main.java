@@ -37,7 +37,7 @@ public class Main {
         
         Parser parser = new Parser(
                 new File("tmc_test_results.xml"),
-                new File("tmc_available_points.txt"),
+                new File(checkResultsFilename),
                 new File("valgrind.log"));
         parser.parse();
         TestList tests = parser.getTests();
