@@ -38,7 +38,11 @@ public class Parser {
     }
     
     public TestList getTests() {
-        return (TestList) tests.values();
+        TestList testList = new TestList();
+        for (Test test : tests.values()) {
+            testList.add(test);
+        }
+        return testList;
     }
     
     public void parse() {
