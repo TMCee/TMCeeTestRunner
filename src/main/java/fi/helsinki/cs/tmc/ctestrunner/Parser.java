@@ -1,4 +1,4 @@
-package fi.helsinki.cs.tmc.testrunner;
+package fi.helsinki.cs.tmc.ctestrunner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
