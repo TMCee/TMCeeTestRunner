@@ -50,9 +50,6 @@ public class TestList extends ArrayList<Test> {
     }
 
     private void writeToJson(Writer w) throws IOException {
-        for (Test test : this) {
-            test.setMessage(test.getMessage() + test.getValgrindTrace());
-        }
         FieldNamingStrategy namingStrategy = new FieldNamingStrategy() {
 
             public String translateName(Field field) {
