@@ -16,6 +16,7 @@ public class Main {
     private String checkResultsFilename;
     private String checkAvailablePointsFilename;
     private String checkValgrindOutputFilename;
+    private String outputFilename;
     
     public static void main(String[] args) {
         try {
@@ -51,6 +52,7 @@ public class Main {
         checkResultsFilename = requireProperty("tmc.check_results_file");
         checkAvailablePointsFilename = requireProperty("tmc.check_available_points");
         checkValgrindOutputFilename = requireProperty("tmc.check_valgrind_output");
+        outputFilename = requireProperty("tmc.ctestrunner_output_file");
     }
     
     private String requireProperty(String name) {
@@ -63,6 +65,6 @@ public class Main {
     }
     
     private void writeResults(TestList tests) throws IOException {
-        tests.writeToJsonFile(new File(checkResultsFilename));
+        tests.writeToJsonFile(new File(outputFilename));
     }
 }
