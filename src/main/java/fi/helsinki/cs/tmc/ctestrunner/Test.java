@@ -37,6 +37,7 @@ public class Test {
     
     public Test(String name) {
         this.name = name;
+        this.status = Status.NOT_STARTED;
     }
 
     public String serialize() {

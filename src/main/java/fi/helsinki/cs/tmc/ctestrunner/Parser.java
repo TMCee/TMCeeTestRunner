@@ -83,7 +83,7 @@ public class Parser {
             String result = node.getAttribute("result");
             String name = node.getElementsByTagName("description").item(0).getTextContent();
             String message = node.getElementsByTagName("message").item(0).getTextContent();
-            tests.put(name, new Test(name, (result.equals("Passed") ? Test.Status.PASSED : Test.Status.FAILED), message));
+            tests.put(name, new Test(name, (result.equals("success") ? Test.Status.PASSED : Test.Status.FAILED), message));
         }
 
         return tests;
