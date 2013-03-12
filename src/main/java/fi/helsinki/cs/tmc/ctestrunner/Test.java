@@ -12,14 +12,14 @@ public class Test {
     private String name;
     private String result;
     private String message;
-    private String[] points;
+    private String[] pointNames;
     private String valgrindTrace;
 
     public Test(String name, String result, String message, String[] points, String valgrindTrace) {
         this(name);
         this.result = result;
         this.message = message;
-        this.points = points;
+        this.pointNames = points;
         this.valgrindTrace = valgrindTrace;
     }
 
@@ -28,7 +28,7 @@ public class Test {
     }
 
     public Test(Test t) {
-        this(t.name, t.result, t.message, t.points.clone(), t.valgrindTrace);
+        this(t.name, t.result, t.message, t.pointNames.clone(), t.valgrindTrace);
     }
     
     public Test(String name) {
@@ -64,11 +64,11 @@ public class Test {
     }
 
     public String[] getPoints() {
-        return this.points;
+        return this.pointNames;
     }
 
     public void setPoints(String[] points) {
-        this.points = points;
+        this.pointNames = points;
     }
 
     public String getValgrindTrace() {
