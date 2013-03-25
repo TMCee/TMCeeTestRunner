@@ -30,7 +30,7 @@ public class Main {
     
     public void run() throws IOException {
         // Let's assume code is already compiled
-        // This can be done by tmc-run script which is passed to the sandbox with each submission
+        // This is done by tmc-run script which is passed to the sandbox with each submission
         try {
             readProperties();
         } catch (IllegalArgumentException e) {
