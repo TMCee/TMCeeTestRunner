@@ -47,17 +47,12 @@ public class Parser {
 
     public void parse() {
         try {
-            System.out.println("Parsing tests");
             tests = parseTests(testOutput);
             testSuites = parseTestSuites(testOutput);
-            System.out.println("Parsing points");
             addPoints(testPoints, tests, testSuites);
-            System.out.println("Parsing valgrind trace");
             addValgrindOutput(valgrindTraces, new ArrayList<Test>(tests.values()));
             if (memoryOptions != null) {
-                System.out.println("Parsing memory tests");
                 addMemoryTests();
-                System.out.println("Applying memory tests");
                 ValgrindMemoryTester.analyzeMemory(tests.values());
             }
         } catch (Exception e) {

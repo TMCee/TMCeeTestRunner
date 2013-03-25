@@ -32,7 +32,6 @@ public class Main {
         // Let's assume code is already compiled
         // This is done by tmc-run script which is passed to the sandbox with each submission
         try {
-            System.out.println("Reading properties");
             readProperties();
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
@@ -41,19 +40,14 @@ public class Main {
         }
         File memoryTestFile = new File(memoryTestOutputFilename);
         if (!memoryTestFile.exists()) memoryTestFile = null;
-        System.out.println("Initializing parser");
         Parser parser = new Parser(
                 new File(checkResultsFilename),
                 new File(checkAvailablePointsFilename),
                 new File(checkValgrindOutputFilename),
                 memoryTestFile);
-        System.out.println("Parsing tests");
         parser.parse();
-        System.out.println("Tests parsed");
         TestList tests = parser.getTests();
-        System.out.println("Writing test results");
         writeResults(tests);
-        System.out.println("Done!");
     }
     
     private void readProperties() {
