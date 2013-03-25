@@ -38,12 +38,13 @@ public class Main {
             System.out.println();
             System.exit(1);
         }
-        
+        File memoryTestFile = new File(memoryTestOutputFilename);
+        if (!memoryTestFile.exists()) memoryTestFile = null;
         Parser parser = new Parser(
                 new File(checkResultsFilename),
                 new File(checkAvailablePointsFilename),
                 new File(checkValgrindOutputFilename),
-                new File(memoryTestOutputFilename));
+                memoryTestFile);
         parser.parse();
         TestList tests = parser.getTests();
         writeResults(tests);
