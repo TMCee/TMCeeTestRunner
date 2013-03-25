@@ -4,6 +4,8 @@
  */
 package fi.helsinki.cs.tmc.ctestrunner;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.FieldNamingStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -57,7 +59,20 @@ public class TestList extends ArrayList<Test> {
                 return field.getName();
             }
         };
-        Gson gson = new GsonBuilder().setFieldNamingStrategy(namingStrategy).create();
+
+        ExclusionStrategy exclusionStrategy = new ExclusionStrategy() {
+
+            public boolean shouldSkipField(FieldAttributes fa) {
+                if (fa.getName().equals("checkedForMemoryLeaks") || fa.getName().equals("maxBytesAllocated")) return true;
+                return false;
+            }
+
+            public boolean shouldSkipClass(Class<?> type) {
+                return false;
+            }
+        };
+        
+        Gson gson = new GsonBuilder().setFieldNamingStrategy(namingStrategy).setExclusionStrategies(exclusionStrategy).create();
         gson.toJson(this, w);
     }
 

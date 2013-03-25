@@ -16,6 +16,7 @@ public class Main {
     private String checkResultsFilename;
     private String checkAvailablePointsFilename;
     private String checkValgrindOutputFilename;
+    private String memoryTestOutputFilename;
     private String outputFilename;
     
     public static void main(String[] args) {
@@ -41,7 +42,8 @@ public class Main {
         Parser parser = new Parser(
                 new File(checkResultsFilename),
                 new File(checkAvailablePointsFilename),
-                new File(checkValgrindOutputFilename));
+                new File(checkValgrindOutputFilename),
+                new File(memoryTestOutputFilename));
         parser.parse();
         TestList tests = parser.getTests();
         writeResults(tests);
@@ -52,6 +54,7 @@ public class Main {
         checkResultsFilename = requireProperty("tmc.check_results_file");
         checkAvailablePointsFilename = requireProperty("tmc.check_available_points");
         checkValgrindOutputFilename = requireProperty("tmc.check_valgrind_output");
+        memoryTestOutputFilename = requireProperty("tmc.memory_test_output");
         outputFilename = requireProperty("tmc.ctestrunner_output_file");
     }
     

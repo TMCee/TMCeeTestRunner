@@ -18,6 +18,8 @@ public class Test {
     private String message;
     private String[] pointNames;
     private String valgrindTrace;
+    private boolean checkedForMemoryLeaks = false;
+    private int maxBytesAllocated = -1;
     
     public Test(String name, Status status, String message, String[] points, String valgrindTrace) {
         this(name);
@@ -82,5 +84,29 @@ public class Test {
 
     public void setValgrindTrace(String valgrindTrace) {
         this.valgrindTrace = valgrindTrace;
+    }
+    
+    public void setCheckedForMemoryLeaks(boolean checkedForMemoryLeaks) {
+        this.checkedForMemoryLeaks = checkedForMemoryLeaks;
+    }
+    
+    public boolean isCheckedForMemoryLeaks() {
+        return checkedForMemoryLeaks;
+    }
+
+    public void setPointNames(String[] pointNames) {
+        this.pointNames = pointNames;
+    }
+
+    public int getMaxBytesAllocated() {
+        return this.maxBytesAllocated;
+    }   
+    
+    public void setMaxBytesAllocated(int maxBytesAllocated) {
+        this.maxBytesAllocated = maxBytesAllocated;
+    }
+    
+    public boolean isCheckedForMemoryUsage() {
+        return this.maxBytesAllocated > -1;
     }
 }

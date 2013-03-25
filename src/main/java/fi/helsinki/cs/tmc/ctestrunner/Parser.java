@@ -24,13 +24,15 @@ public class Parser {
     private File testOutput;
     private File testPoints;
     private File valgrindTraces;
+    private File memoryOptions;
     private HashMap<String, Test> tests = new HashMap<String, Test>();
     private HashMap<String, TestSuite> testSuites = new HashMap<String, TestSuite>();
     
-    public Parser(File testOutput, File testPoints, File valgrindTraces) {
+    public Parser(File testOutput, File testPoints, File valgrindTraces, File memoryOptions) {
         this.testOutput = testOutput;
         this.testPoints = testPoints;
         this.valgrindTraces = valgrindTraces;
+        this.memoryOptions = memoryOptions;
     }
     
     public TestList getTests() {
@@ -47,6 +49,8 @@ public class Parser {
             testSuites = parseTestSuites(testOutput);
             addPoints(testPoints, tests, testSuites);
             addValgrindOutput(valgrindTraces, new ArrayList<Test>(tests.values()));
+            addMemoryTests();
+            ValgrindMemoryTester.analyzeMemory(tests.values());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -67,6 +71,34 @@ public class Parser {
             suites.put(name, new TestSuite(name));
         }
         return suites;
+    }
+    
+    private void addMemoryTests() throws FileNotFoundException {
+        HashMap<String, String> memoryInfoByName = new HashMap<String, String>();
+        Scanner scanner = new Scanner(memoryOptions, "UTF-8");
+        while (scanner.hasNextLine()) {
+            String[] split = scanner.nextLine().split(" ");
+            memoryInfoByName.put(split[0], split[1] + " " + split[2]);
+        }
+        scanner.close();
+
+        for (Test t : tests.values()) {
+            String str = memoryInfoByName.get(t.getName());
+            if (str == null) {
+                continue;
+            }
+            String[] params = str.split(" ");
+            int checkLeaks, maxBytes;
+            try {
+                checkLeaks = Integer.parseInt(params[0]);
+                maxBytes = Integer.parseInt(params[1]);
+            } catch (Exception e) {
+                checkLeaks = 0;
+                maxBytes = -1;
+            }
+            t.setMaxBytesAllocated(maxBytes);
+            t.setCheckedForMemoryLeaks(checkLeaks == 1);
+        }
     }
     
     private HashMap<String, Test> parseTests(File testOutput) throws ParserConfigurationException, SAXException, IOException {
