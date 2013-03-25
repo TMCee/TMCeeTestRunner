@@ -1,4 +1,5 @@
 package fi.helsinki.cs.tmc.ctestrunner;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -17,24 +18,25 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 /**
- * 
+ *
  * @author rase
  */
 public class Parser {
+
     private File testOutput;
     private File testPoints;
     private File valgrindTraces;
     private File memoryOptions;
     private HashMap<String, Test> tests = new HashMap<String, Test>();
     private HashMap<String, TestSuite> testSuites = new HashMap<String, TestSuite>();
-    
+
     public Parser(File testOutput, File testPoints, File valgrindTraces, File memoryOptions) {
         this.testOutput = testOutput;
         this.testPoints = testPoints;
         this.valgrindTraces = valgrindTraces;
         this.memoryOptions = memoryOptions;
     }
-    
+
     public TestList getTests() {
         TestList testList = new TestList();
         for (Test test : tests.values()) {
@@ -42,27 +44,29 @@ public class Parser {
         }
         return testList;
     }
-    
+
     public void parse() {
         try {
             tests = parseTests(testOutput);
             testSuites = parseTestSuites(testOutput);
             addPoints(testPoints, tests, testSuites);
             addValgrindOutput(valgrindTraces, new ArrayList<Test>(tests.values()));
-            addMemoryTests();
-            ValgrindMemoryTester.analyzeMemory(tests.values());
+            if (memoryOptions != null) {
+                addMemoryTests();
+                ValgrindMemoryTester.analyzeMemory(tests.values());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     private HashMap<String, TestSuite> parseTestSuites(File testOutput) throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document doc = dBuilder.parse(testOutput);
 
         doc.getDocumentElement().normalize();
-        
+
         NodeList nodeList = doc.getElementsByTagName("suite");
         HashMap<String, TestSuite> suites = new HashMap<String, TestSuite>();
         for (int i = 0; i < nodeList.getLength(); i++) {
@@ -72,7 +76,7 @@ public class Parser {
         }
         return suites;
     }
-    
+
     private void addMemoryTests() throws FileNotFoundException {
         HashMap<String, String> memoryInfoByName = new HashMap<String, String>();
         Scanner scanner = new Scanner(memoryOptions, "UTF-8");
@@ -100,7 +104,7 @@ public class Parser {
             t.setCheckedForMemoryLeaks(checkLeaks == 1);
         }
     }
-    
+
     private HashMap<String, Test> parseTests(File testOutput) throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -130,13 +134,13 @@ public class Parser {
                 Test associatedTest = tests.get(name);
                 if (associatedTest != null) {
                     String[] pointsArray = new String[splitLine.length - 2];
-                    System.arraycopy(splitLine, 2, pointsArray, 0, pointsArray.length);                    
+                    System.arraycopy(splitLine, 2, pointsArray, 0, pointsArray.length);
                     associatedTest.setPoints(pointsArray);
                 }
             } else if (splitLine[0].equals("[suite]")) {
                 String name = splitLine[1];
                 String[] pointsArray = new String[splitLine.length - 2];
-                System.arraycopy(splitLine, 2, pointsArray, 0, pointsArray.length); 
+                System.arraycopy(splitLine, 2, pointsArray, 0, pointsArray.length);
                 TestSuite associatedSuite = testSuites.get(name);
                 if (associatedSuite != null) {
                     associatedSuite.setPoints(pointsArray);
@@ -179,10 +183,12 @@ public class Parser {
             tests.get(i).setValgrindTrace(outputs[i]);
         }
     }
-    
+
     private int findIndex(int pid, int[] pids) {
         for (int i = 0; i < pids.length; i++) {
-            if (pids[i] == pid) return i;
+            if (pids[i] == pid) {
+                return i;
+            }
             if (pids[i] == 0) {
                 pids[i] = pid;
                 return i;
